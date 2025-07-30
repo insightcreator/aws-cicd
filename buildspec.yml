@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt -t lib
+  build:
+    commands:
+      - echo "Zipping Lambda function..."
+      - cd lib
+      - zip -r ../function.zip .
+      - cd ..
+      - zip -g function.zip lambda_function.py
+  post_build:
+    commands:
+      - echo "Uploading to S3"
+      - aws s3 cp  function.zip s://de-bucket-dd/
+      - echo "Updating lambda function to s3"
+      - aws lambda update-function-code \
+          --function-name Github-repo-cicd \
+          --s3-bucket de-bucket-dd --s3-key function.zip
+      - echo "Deployment Complete"
