@@ -17,7 +17,7 @@ phases:
   post_build:
     commands:
       - echo "Uploading to S3"
-      - aws s3 cp  function.zip s://de-bucket-dd/
+      - aws s3 cp  function.zip s3://de-bucket-dd/
       - echo "Updating lambda function to s3"
       - aws lambda update-function-code \
           --function-name Github-repo-cicd \
