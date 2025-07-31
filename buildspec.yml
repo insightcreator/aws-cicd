@@ -16,6 +16,8 @@ phases:
       - zip -g function.zip lambda_function.py
   post_build:
     commands:
+      - echo "Checking function.zip"
+      - ls -lh function.zip
       - echo "Uploading to S3"
       - aws s3 cp  function.zip s3://de-bucket-dd/
       - echo "Updating lambda function to s3"
